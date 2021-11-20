@@ -1,21 +1,21 @@
 const app = require("../app");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;
-
 const dbURL = process.env.MONGODB_URL;
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
 
-const connection = mongoose.connect(dbURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+async function startServer() {
+  try {
+    await mongoose.connect(dbURL, options);
+    await app.listen(PORT);
+    console.log(`Server successfully running on http://localhost:${PORT}/`);
+  } catch (e) {
+    throw new Error(e);
+  }
+}
 
-connection.then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running. Use our API on port: ${PORT}`);
-    })
-}).catch(e => {
-    console.log(e);
-    process.exit(1);
-})
-
+startServer();
