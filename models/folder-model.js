@@ -8,7 +8,10 @@ const folder = new Schema(
       type: String,
       required: true,
     },
-    quantity: Number,
+    quantity: {
+      type: Number,
+      default: 0,
+    },
     sys: {
       created: {
         type: Date,
