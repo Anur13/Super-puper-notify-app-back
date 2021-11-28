@@ -2,10 +2,11 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const messageListValidations = {
+  //TODO: proper validate messageId type = ObjectId
   create: Joi.object({
     title: Joi.string().min(1).required(),
-    folderId: Joi.string().allow(null),
-    messagesId: Joi.array().required(), //TODO: When message schema is created, add .has(Schema)
+    folderId: Joi.objectId,
+    messagesId: Joi.array(), //TODO: When message schema is created, add .has(Schema)
     // userId: Joi.objectId().required()
   }),
   get: Joi.object({

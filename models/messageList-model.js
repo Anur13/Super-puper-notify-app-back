@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.ObjectId;
 
 const messageList = new Schema(
   {
@@ -11,8 +12,11 @@ const messageList = new Schema(
     //     type: objectId,
     //     required: true,
     // },
-    folderId: Schema.Types.Mixed,
-    messagesId: [String],
+    folderId: {
+      type: ObjectId,
+      default: null,
+    },
+    messagesId: [ObjectId],
     sys: {
       created: {
         type: Date,

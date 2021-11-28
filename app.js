@@ -2,8 +2,8 @@ const express = require("express");
 const logger = require("morgan");
 const Constants = require("./helpers/constants/constants");
 // INFO Routers imports
-const FolderRoute = require("./routes/folder-route");
-const MessageListRouter = require("./routes/messageList-router");
+const FolderRoute = require("./routers/folder-router");
+const MessageListRouter = require("./routers/messageList-router");
 //
 const cors = require("cors");
 require("dotenv").config();
