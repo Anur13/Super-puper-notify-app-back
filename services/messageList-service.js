@@ -2,6 +2,7 @@ const MessageList = require("../models/messageList-model");
 
 const MessageListService = {
   create: async function (object) {
+    // TODO: Transfer to get
     const currentDate = new Date().toISOString();
     const objectWithSys = {
       ...object,

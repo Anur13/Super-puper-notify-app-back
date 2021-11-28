@@ -11,6 +11,7 @@ const FolderController = {
     const { error, value } = folderCreateType.validate(req.body);
     if (error) return res.status(400).json({ message: error });
 
+    // TODO: add implementation regarding unique folder title in lowerCase
     let response;
     try {
       response = await FolderServices.createFolder(value);
@@ -25,12 +26,12 @@ const FolderController = {
   },
 
   get: async function (req, res) {
-    const { error, value } = folderGetType.validate(req.body); //SUGGESTION user query param
+    const { error, value } = folderGetType.validate(req.body);
     if (error) return res.status(400).json({ message: error });
 
     const { id } = value;
     const response = await FolderServices.getFolder(id);
-    if (!response) return res.status(200).send(); // FIXME code 404
+    if (!response) return res.status(404).send();
 
     const { _id, title, sys, ...rest } = response.toJSON();
     const object = { id: _id, title, ...rest, sys };
@@ -61,10 +62,10 @@ const FolderController = {
     if (error) return res.status(400).json({ message: error });
 
     const { id } = value;
-    const folder = await FolderServices.getFolder(id); // TODO add error validations
+    const folder = await FolderServices.getFolder(id);
     if (!folder)
       return res.status(404).json({ message: "Missing such folder" });
-
+    // TODO: add implementation regarding unique folder title in lowerCase
     let response;
     try {
       const object = { ...folder.toJSON(), ...value };
