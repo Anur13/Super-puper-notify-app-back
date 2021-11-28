@@ -21,7 +21,7 @@ const folderDeleteType = Joi.object({
 });
 
 const folderUpdateType = Joi.object({
-  id: Joi.objectId(),
+  id: Joi.objectId(), // FIXME: required?
   title: Joi.string().min(1),
   quantity: Joi.number(),
   sys: Joi.object({

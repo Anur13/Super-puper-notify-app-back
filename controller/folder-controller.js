@@ -9,13 +9,13 @@ const {
 const FolderController = {
   create: async function (req, res) {
     const { error, value } = folderCreateType.validate(req.body);
-    if (error) res.status(400).json({ message: error });
+    if (error) return res.status(400).json({ message: error });
 
     let response;
     try {
       response = await FolderServices.createFolder(value);
     } catch (e) {
-      res.status(400).send(e);
+      return res.status(400).send(e);
     }
 
     const { _id, sys, title, ...rest } = response.toJSON();
@@ -25,12 +25,12 @@ const FolderController = {
   },
 
   get: async function (req, res) {
-    const { error, value } = folderGetType.validate(req.body);
-    if (error) res.status(400).json({ message: error });
+    const { error, value } = folderGetType.validate(req.body); //SUGGESTION user query param
+    if (error) return res.status(400).json({ message: error });
 
     const { id } = value;
     const response = await FolderServices.getFolder(id);
-    if (!response) return res.status(200).send();
+    if (!response) return res.status(200).send(); // FIXME code 404
 
     const { _id, title, sys, ...rest } = response.toJSON();
     const object = { id: _id, title, ...rest, sys };
@@ -40,7 +40,7 @@ const FolderController = {
 
   delete: async function (req, res) {
     const { error, value } = folderDeleteType.validate(req.body);
-    if (error) res.status(400).json({ message: error });
+    if (error) return res.status(400).json({ message: error });
 
     const { id } = value;
     const folder = await FolderServices.getFolder(id);
@@ -50,7 +50,7 @@ const FolderController = {
     try {
       await FolderServices.deleteFolder(id);
     } catch (e) {
-      res.status(400).json({ message: e.message });
+      return res.status(400).json({ message: e.message });
     }
 
     res.status(200).send({});
@@ -58,10 +58,10 @@ const FolderController = {
 
   update: async function (req, res) {
     const { error, value } = folderUpdateType.validate(req.body);
-    if (error) res.status(400).json({ message: error });
+    if (error) return res.status(400).json({ message: error });
 
     const { id } = value;
-    const folder = await FolderServices.getFolder(id);
+    const folder = await FolderServices.getFolder(id); // TODO add error validations
     if (!folder)
       return res.status(404).json({ message: "Missing such folder" });
 
@@ -72,7 +72,7 @@ const FolderController = {
 
       response = await FolderServices.updateFolder(object);
     } catch (e) {
-      res.status(400).json({ message: e.message });
+      return res.status(400).json({ message: e.message });
     }
 
     const { _id, title, sys, ...rest } = response.toJSON();

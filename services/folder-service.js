@@ -1,6 +1,7 @@
 const Folder = require("../models/folder-model");
 
 const ContactServices = {
+  //FIXME Is this right name?
   createFolder: function (object) {
     const currentDate = new Date().toISOString();
 
@@ -8,7 +9,7 @@ const ContactServices = {
       ...object,
       sys: { created: currentDate, lastUpdated: currentDate },
     };
-
+    //TODO: check if folder with such title already exists
     return Folder.create(objectWithSys);
   },
   getFolder: function (id) {
