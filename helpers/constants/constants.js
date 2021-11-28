@@ -7,6 +7,13 @@ const Constants = {
       delete: "/delete",
       update: "/update",
     },
+    messageList: {
+      main: "/messageList",
+      create: "/create",
+      get: "/get",
+      delete: "/delete",
+      update: "/update",
+    },
   },
 };
 
