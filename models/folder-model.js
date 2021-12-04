@@ -7,6 +7,7 @@ const folder = new Schema(
     title: {
       type: String,
       required: true,
+      unique: true,
     },
     quantity: {
       type: Number,

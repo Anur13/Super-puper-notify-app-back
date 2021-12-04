@@ -9,20 +9,8 @@ const MessageListService = {
     };
     objectWithSys.folderId = objectWithSys.folderId || null;
 
-    let duplicateCheck;
-    if (objectWithSys.folderId) {
-      duplicateCheck = await MessageList.findOne({
-        folderId: objectWithSys.folderId,
-        title: objectWithSys.title,
-      });
-    } else {
-      duplicateCheck = await MessageList.findOne({
-        title: objectWithSys.title,
-        folderId: null,
-      });
-    }
-
-    if (duplicateCheck) {
+    const collision = await checkIfTitleCollisionExists(objectWithSys);
+    if (collision) {
       return null;
     }
 
@@ -34,14 +22,34 @@ const MessageListService = {
   delete: function (id) {
     return MessageList.findOneAndDelete({ _id: id });
   },
-  update: function (object) {
+  update: async function (object) {
+    const collision = await checkIfTitleCollisionExists(object);
+    if (collision) {
+      return null;
+    }
+
     const currentDate = new Date().toISOString();
-
     const { id } = object;
-
     object.sys.lastUpdated = currentDate;
     return MessageList.findOneAndUpdate({ _id: id }, object, { new: true });
   },
 };
+
+async function checkIfTitleCollisionExists(object) {
+  let collision;
+  const regex = new RegExp("^" + object.title + "$", "i");
+  if (object.folderId) {
+    collision = await MessageList.findOne({
+      title: { $regex: regex },
+      folderId: object.folderId,
+    });
+  } else {
+    collision = await MessageList.findOne({
+      title: { $regex: regex },
+      folderId: null,
+    });
+  }
+  return !!collision;
+}
 
 module.exports = MessageListService;

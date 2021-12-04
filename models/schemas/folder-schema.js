@@ -1,5 +1,6 @@
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+// TODO: change to object methods structure
 
 const folderCreateType = Joi.object({
   title: Joi.string().min(1).required(),
@@ -13,7 +14,7 @@ const folderCreateType = Joi.object({
 });
 
 const folderGetType = Joi.object({
-  id: Joi.objectId(),
+  id: Joi.objectId().required(),
 });
 
 const folderDeleteType = Joi.object({
@@ -21,7 +22,7 @@ const folderDeleteType = Joi.object({
 });
 
 const folderUpdateType = Joi.object({
-  id: Joi.objectId(), // FIXME: required?
+  id: Joi.objectId().required(),
   title: Joi.string().min(1),
   quantity: Joi.number(),
   sys: Joi.object({
