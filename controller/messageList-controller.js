@@ -1,60 +1,50 @@
 const messageListValidations = require("../models/schemas/messageList-schema");
-const APIError = require("../errors/test");
+const APIError = require("../errors/generalErrors");
 const MessageListService = require("../services/messageList-service");
+const messageListErrors = require("../errors/messageListErrors");
 
 const MessageListController = {
-  create: async function (req, res) {
+  create: async function (req, res, next) {
     const { error, value } = messageListValidations.create.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error });
     }
-
     try {
       const response = await MessageListService.create(value);
-      if (!response) {
-        return res
-          .status(400)
-          .json({ message: "Message list with such title already exists" });
-      }
       response.id = response._id;
       delete response._id;
-
       res.status(201).send(response);
     } catch (e) {
-      res.status(400).json({ message: e.message });
+      next(e, req, res);
     }
   },
 
-  get: async function (req, res) {
+  get: async function (req, res, next) {
     const { error, value } = messageListValidations.get.validate(req.body);
+
     if (error) {
       return res.status(400).json({ message: error });
     }
-
-    const response = await MessageListService.get(value.id);
-    if (!response) {
-      return res.status(404).send();
+    try {
+      const response = await MessageListService.get(value.id);
+      response.id = response._id;
+      delete response._id;
+      res.status(200).send(response);
+    } catch (e) {
+      next(e, req, res);
     }
-
-    response.id = response._id;
-    delete response._id;
-    res.status(200).send(response);
   },
 
-  delete: async function (req, res) {
+  delete: async function (req, res, next) {
     const { error, value } = messageListValidations.delete.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error });
     }
     try {
       const messageList = await MessageListService.delete(value.id);
-      if (messageList) {
-        res.status(200).send({});
-      } else {
-        return res.status(404).json({ message: "No such message list found" });
-      }
+      res.status(200).send({});
     } catch (e) {
-      res.status(400).json({ message: e.message });
+      next(e, req, res);
     }
   },
 
@@ -63,24 +53,16 @@ const MessageListController = {
     if (error) {
       return res.status(400).json({ message: error });
     }
-
     const messageListToUpdate = await MessageListService.get(value.id);
-    if (!messageListToUpdate) {
-      return res.status(404).json({ message: "No such message list found" });
-    }
     try {
       const object = { ...messageListToUpdate.toJSON(), ...value };
       delete object._id;
       const response = await MessageListService.update(object);
-      if (!response) {
-        const error = new APIError("NOT FOUND", 404, "detailed explanation", true);
-        return next(error, req, res);
-      }
       response.id = response._id;
       delete response._id;
       res.status(200).send(response);
     } catch (e) {
-      res.status(400).json({ message: e.message });
+      next(e, req, res);
     }
   },
 };
