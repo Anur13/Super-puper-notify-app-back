@@ -26,28 +26,27 @@ describe("create", () => {
     await MessageListService.create(mockList);
 
     const insertedList = await MessageList.findOne({ title: "some-user-id" });
-
-    expect(insertedList).toEqual(
-      expect.objectContaining({
-        folderId: null,
-        sys: expect.objectContaining({
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-        }),
-        messagesId: [],
-        title: "some-user-id",
-      }),
-    );
     await MessageList.findOneAndDelete({ title: "some-user-id" });
+
+    expect(insertedList).toMatchObject({
+      folderId: null,
+      sys: expect.objectContaining({
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      }),
+      messagesId: [],
+      title: "some-user-id",
+    });
   });
 
   it("should return null when new list created and if list with the same folderId and title exists", async () => {
-    const mockList = { title: "test", folderId: "1" };
+    const mockList = { title: "test", folderId: "619aaaf99cd973869e2d764f" };
 
     await MessageListService.create(mockList);
     const result = await MessageListService.create(mockList);
-    expect(result).toEqual(null);
     await MessageList.findOneAndDelete({ title: "test" });
+
+    expect(result).toEqual(null);
   });
 
   it("should return null when new list created and if list with folderId = null and same title exists", async () => {
@@ -55,8 +54,9 @@ describe("create", () => {
 
     await MessageListService.create(mockList);
     const result = await MessageListService.create(mockList);
-    expect(result).toEqual(null);
     await MessageList.findOneAndDelete({ title: "test" });
+
+    expect(result).toEqual(null);
   });
 
   it(
@@ -64,49 +64,44 @@ describe("create", () => {
       " and there exists a list with folderId and same title",
     async () => {
       const mockListNoFolderId = { title: "No folder id", folderId: null };
-      const mockListWithFolderId = { title: "With folder id", folderId: 1 };
+      const mockListWithFolderId = {
+        title: "With folder id",
+        folderId: "619aaaf99cd973869e2d764f",
+      };
 
       await MessageListService.create(mockListWithFolderId);
       const result = await MessageListService.create(mockListNoFolderId);
-
-      expect(result).toEqual(
-        expect.objectContaining({
-          folderId: null,
-          sys: expect.objectContaining({
-            created: expect.any(Date),
-            lastUpdated: expect.any(Date),
-          }),
-          messagesId: [],
-          title: "No folder id",
-        }),
-      );
       await MessageList.findOneAndDelete({ title: "No folder id" });
       await MessageList.findOneAndDelete({ title: "With folder id" });
+
+      expect(result).toMatchObject({
+        folderId: null,
+        sys: expect.objectContaining({
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        }),
+        messagesId: [],
+        title: "No folder id",
+      });
     },
   );
   it("on update should return object with updated fields and lastUpdated field", async () => {
-    const newList = await MessageListService.create({ title: "New list" });
+    const newList = await MessageListService.create({ title: "Test title" });
 
-    // const df = newList.to;
-    const test = { ...newList, title: "Updated list", messagesId: [3, 4] };
-    console.log(newList, test);
-    // const updatedList = MessageListService.update({
-    //   ...newList,
-    //   title: "Updated list",
-    //   messagesId: [3, 4],
-    // });
+    const updates = {
+      sys: newList.sys,
+      folderId: newList.folderId,
+      title: "Updated list",
+      messagesId: [3, 4],
+      id: newList._id,
+    };
+    console.log(newList.sys.lastUpdated);
+    await setTimeout(() => {
+      const updatedList = MessageListService.update(updates);
+      console.log(updatedList.sys.lastUpdated);
 
-    // expect(updatedList).toEqual(
-    //   expect.objectContaining({
-    //     folderId: null,
-    //     sys: expect.objectContaining({
-    //       created: expect.any(Date),
-    //       lastUpdated: expect.any(Date),
-    //     }),
-    //     messagesId: [3, 4],
-    //     title: "Updated list",
-    //   }),
-    // );
-    // expect(updatedList.sys.lastUpdated).not.toEqual(newList.sys.lastUpdated);
+      expect(updatedList.sys.lastUpdated).not.toEqual(newList.sys.lastUpdated);
+    }, 10000);
+    await MessageList.findOneAndDelete({ _id: newList._id });
   });
 });

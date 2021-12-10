@@ -16,7 +16,9 @@ const messageList = new Schema(
       type: ObjectId,
       default: null,
     },
-    messagesId: [ObjectId],
+    messagesId: [String],
+    // messagesId: [ObjectId],
+
     sys: {
       created: {
         type: Date,
