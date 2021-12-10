@@ -1,7 +1,6 @@
 const messageListValidations = require("../models/schemas/messageList-schema");
-const APIError = require("../errors/generalErrors");
 const MessageListService = require("../services/messageList-service");
-const messageListErrors = require("../errors/messageListErrors");
+const reformatResponse = require("../utils/controllerResponseReformatter");
 
 const MessageListController = {
   create: async function (req, res, next) {
@@ -11,9 +10,7 @@ const MessageListController = {
     }
     try {
       const response = await MessageListService.create(value);
-      response.id = response._id;
-      delete response._id;
-      res.status(201).send(response);
+      res.status(200).send(reformatResponse(response));
     } catch (e) {
       next(e, req, res);
     }
@@ -21,15 +18,12 @@ const MessageListController = {
 
   get: async function (req, res, next) {
     const { error, value } = messageListValidations.get.validate(req.body);
-
     if (error) {
       return res.status(400).json({ message: error });
     }
     try {
       const response = await MessageListService.get(value.id);
-      response.id = response._id;
-      delete response._id;
-      res.status(200).send(response);
+      res.status(200).send(reformatResponse(response));
     } catch (e) {
       next(e, req, res);
     }
@@ -41,7 +35,7 @@ const MessageListController = {
       return res.status(400).json({ message: error });
     }
     try {
-      const messageList = await MessageListService.delete(value.id);
+      await MessageListService.delete(value.id);
       res.status(200).send({});
     } catch (e) {
       next(e, req, res);
@@ -58,9 +52,7 @@ const MessageListController = {
       const object = { ...messageListToUpdate.toJSON(), ...value };
       delete object._id;
       const response = await MessageListService.update(object);
-      response.id = response._id;
-      delete response._id;
-      res.status(200).send(response);
+      res.status(200).send(reformatResponse(response));
     } catch (e) {
       next(e, req, res);
     }

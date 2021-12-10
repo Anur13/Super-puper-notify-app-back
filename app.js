@@ -25,10 +25,6 @@ app.use(Constants.routes.messageList.main, MessageListRouter);
 // });
 
 app.use((error, req, res, next) => {
-  console.log("test");
-  // if (typeof error == "string") {
-  //   return res.status(400).json({ message: error });
-  // }
   res.status(error.statusCode).json({ message: error.description });
 });
 
