@@ -15,6 +15,10 @@ const Constants = {
       update: "/update",
     },
   },
+  errorStatusCodes: {
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+  },
 };
 
 module.exports = Constants;
