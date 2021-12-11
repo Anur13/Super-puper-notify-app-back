@@ -1,4 +1,5 @@
 const MessageList = require("../models/messageList-model");
+const messageListErrors = require("../errors/messageListErrors");
 
 const MessageListService = {
   create: async function (object) {
@@ -11,21 +12,29 @@ const MessageListService = {
 
     const collision = await checkIfTitleCollisionExists(objectWithSys);
     if (collision) {
-      return null;
+      throw messageListErrors.sameTitleCreate;
     }
 
     return MessageList.create(objectWithSys);
   },
-  get: function (id) {
-    return MessageList.findOne({ _id: id });
+  get: async function (id) {
+    const result = await MessageList.findOne({ _id: id });
+    if (result) {
+      return result;
+    }
+    throw messageListErrors.notFound;
   },
-  delete: function (id) {
-    return MessageList.findOneAndDelete({ _id: id });
+  delete: async function (id) {
+    const result = await MessageList.findOneAndDelete({ _id: id });
+    if (result) {
+      return result;
+    }
+    throw messageListErrors.notFound;
   },
   update: async function (object) {
     const collision = await checkIfTitleCollisionExists(object);
     if (collision) {
-      return null;
+      throw messageListErrors.sameTitleUpdate;
     }
 
     const currentDate = new Date().toISOString();

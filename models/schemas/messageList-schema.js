@@ -19,9 +19,6 @@ const messageListValidations = {
     id: Joi.objectId().required(),
     title: Joi.string().min(1),
     messagesId: Joi.array().required(), //TODO: When message schema is created, add .has(Schema)
-    sys: Joi.object({
-      lastUpdated: Joi.date().iso(),
-    }),
   }),
 };
 
