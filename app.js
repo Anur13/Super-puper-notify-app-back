@@ -1,6 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
-const Constants = require("./helpers/constants/constants");
+const Constants = require("./common/constants/constants");
 // INFO Routers imports
 const FolderRoute = require("./routers/folder-router");
 const MessageListRouter = require("./routers/messageList-router");
@@ -26,6 +26,7 @@ app.use(Constants.routes.messageList.main, MessageListRouter);
 
 app.use((error, req, res, next) => {
   res.status(error.statusCode).json({ message: error.description });
+  next();
 });
 
 module.exports = app;

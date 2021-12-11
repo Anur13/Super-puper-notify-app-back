@@ -44,6 +44,8 @@ const MessageListService = {
   },
 };
 
+//TODO: move to helper file
+
 async function checkIfTitleCollisionExists(object) {
   let collision;
   const regex = new RegExp("^" + object.title + "$", "i");

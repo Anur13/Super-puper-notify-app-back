@@ -1,6 +1,6 @@
 const messageListValidations = require("../models/schemas/messageList-schema");
 const MessageListService = require("../services/messageList-service");
-const reformatResponse = require("../utils/controllerResponseReformatter");
+const { reformatResponse } = require("../helpers/controller-helper");
 
 const MessageListController = {
   create: async function (req, res, next) {

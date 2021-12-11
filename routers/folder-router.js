@@ -1,5 +1,5 @@
 const express = require("express");
-const Constants = require("../helpers/constants/constants");
+const Constants = require("../common/constants/constants");
 const router = express.Router();
 const FolderController = require("../controller/folder-controller");
 

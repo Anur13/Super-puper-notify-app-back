@@ -5,6 +5,7 @@ const {
   folderDeleteType,
   folderUpdateType,
 } = require("../models/schemas/folder-schema");
+const { reformatResponse } = require("../helpers/controller-helper");
 
 const FolderController = {
   create: async function (req, res) {
@@ -19,8 +20,7 @@ const FolderController = {
       return res.status(400).send(e);
     }
 
-    const { _id, sys, title, ...rest } = response.toJSON();
-    const object = { id: _id, title, ...rest, sys };
+    const object = reformatResponse(response);
 
     res.status(201).send(object);
   },
@@ -33,8 +33,7 @@ const FolderController = {
     const response = await FolderServices.getFolder(id);
     if (!response) return res.status(404).send();
 
-    const { _id, title, sys, ...rest } = response.toJSON();
-    const object = { id: _id, title, ...rest, sys };
+    const object = reformatResponse(response);
 
     res.status(200).send(object);
   },
@@ -45,8 +44,7 @@ const FolderController = {
 
     const { id } = value;
     const folder = await FolderServices.getFolder(id);
-    if (!folder)
-      return res.status(404).json({ message: "Missing such folder" });
+    if (!folder) return res.status(404).json({ message: "Missing such folder" });
 
     try {
       await FolderServices.deleteFolder(id);
@@ -63,8 +61,7 @@ const FolderController = {
 
     const { id } = value;
     const folder = await FolderServices.getFolder(id);
-    if (!folder)
-      return res.status(404).json({ message: "Missing such folder" });
+    if (!folder) return res.status(404).json({ message: "Missing such folder" });
     // TODO: add implementation regarding unique folder title in lowerCase
     let response;
     try {
@@ -76,8 +73,7 @@ const FolderController = {
       return res.status(400).json({ message: e.message });
     }
 
-    const { _id, title, sys, ...rest } = response.toJSON();
-    const object = { id: _id, title, ...rest, sys };
+    const object = reformatResponse(response);
 
     res.status(200).send(object);
   },

@@ -1,5 +1,5 @@
 const APIError = require("../errors/generalErrors");
-const { errorStatusCodes } = require("../helpers/constants/constants");
+const { errorStatusCodes } = require("../common/constants/constants");
 
 const messageListErrors = {
   sameTitleCreate: new APIError(
