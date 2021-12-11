@@ -4,6 +4,7 @@ const dbURL = process.env.MONGODB_URL;
 const MessageListService = require("../services/messageList-service");
 
 const MessageList = require("../models/messageList-model");
+
 describe("create", () => {
   let connection;
 
@@ -21,7 +22,7 @@ describe("create", () => {
 
   afterEach(() => {});
 
-  it("should expand the object with new fields and save it", async () => {
+  it("should create new object and save it to db", async () => {
     const mockList = { title: "some-user-id" };
     await MessageListService.create(mockList);
 
@@ -39,28 +40,32 @@ describe("create", () => {
     });
   });
 
-  it("should return null when new list created and if list with the same folderId and title exists", async () => {
+  it("should return null when creating new list with duplicating title and folderId", async () => {
     const mockList = { title: "test", folderId: "619aaaf99cd973869e2d764f" };
 
     await MessageListService.create(mockList);
-    const result = await MessageListService.create(mockList);
-    await MessageList.findOneAndDelete({ title: "test" });
 
-    expect(result).toEqual(null);
+    // const result = async () => await MessageListService.create(mockList);
+
+    // await MessageList.findOneAndDelete({ title: "test" });
+
+    expect(async () => {
+      await MessageListService.create(mockList);
+    }).toThrow(TypeError);
   });
 
-  it("should return null when new list created and if list with folderId = null and same title exists", async () => {
+  it("should return null when creating new list with duplicating title without folderId", async () => {
     const mockList = { title: "test", folderId: null };
 
     await MessageListService.create(mockList);
     const result = await MessageListService.create(mockList);
     await MessageList.findOneAndDelete({ title: "test" });
 
-    expect(result).toEqual(null);
+    expect(result).toThrow(TypeError);
   });
 
   it(
-    "should return list when new list created, folderId = null," +
+    "should return list when creating new list without folderId" +
       " and there exists a list with folderId and same title",
     async () => {
       const mockListNoFolderId = { title: "No folder id", folderId: null };
@@ -85,6 +90,7 @@ describe("create", () => {
       });
     },
   );
+
   it("on update should return object with updated fields and lastUpdated field", async () => {
     const newList = await MessageListService.create({ title: "Test title" });
 
@@ -95,13 +101,14 @@ describe("create", () => {
       messagesId: [3, 4],
       id: newList._id,
     };
-    console.log(newList.sys.lastUpdated);
-    await setTimeout(() => {
-      const updatedList = MessageListService.update(updates);
-      console.log(updatedList.sys.lastUpdated);
 
-      expect(updatedList.sys.lastUpdated).not.toEqual(newList.sys.lastUpdated);
-    }, 10000);
+    const oldtime = parseInt((newList.sys.lastUpdated.getTime() / 1000).toFixed(0));
+    jest.setTimeout(3000);
+    const updatedList = await MessageListService.update(updates);
     await MessageList.findOneAndDelete({ _id: newList._id });
+
+    const newTime = parseInt((updatedList.sys.lastUpdated.getTime() / 1000).toFixed(0));
+
+    expect(oldtime).toBeLessThan(newTime);
   });
 });
