@@ -1,4 +1,7 @@
 const Constants = {
+  common: {
+    title: "title",
+  },
   routes: {
     folder: {
       main: "/folder",

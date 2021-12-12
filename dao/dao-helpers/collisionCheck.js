@@ -23,7 +23,7 @@ async function checkIfTitleCollisionExists(model, searchParam, searchParamField,
       collision = await model.findOne(searchObject);
   }
 
-  return !!collision;
+  return collision;
 }
 
 module.exports = checkIfTitleCollisionExists;
