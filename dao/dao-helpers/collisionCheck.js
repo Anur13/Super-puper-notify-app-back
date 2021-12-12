@@ -17,9 +17,10 @@ async function checkIfTitleCollisionExists(model, searchParam, searchParamField,
         break;
       }
     default:
-      collision = await model.findOne({
-        searchParamField: { $regex: regex },
-      });
+      // eslint-disable-next-line no-case-declarations
+      const searchObject = {};
+      searchObject[searchParamField] = regex;
+      collision = await model.findOne(searchObject);
   }
 
   return !!collision;
