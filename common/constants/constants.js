@@ -17,6 +17,13 @@ const Constants = {
       delete: "/delete",
       update: "/update",
     },
+    message: {
+      main: "/message",
+      create: "/create",
+      get: "/get",
+      delete: "/delete",
+      update: "/update",
+    },
   },
   errorStatusCodes: {
     BAD_REQUEST: 400,
