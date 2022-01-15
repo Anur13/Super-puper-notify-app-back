@@ -10,6 +10,10 @@ const Constants = {
       delete: "/delete",
       update: "/update",
     },
+    user: {
+      create: "/registration",
+      login: "/login",
+    },
     messageList: {
       main: "/messageList",
       create: "/create",
@@ -28,6 +32,7 @@ const Constants = {
   errorStatusCodes: {
     BAD_REQUEST: 400,
     NOT_FOUND: 404,
+    CONFLICT: 409,
   },
 };
 

@@ -6,6 +6,7 @@ const FolderController = {
   create: async function (req, res, next) {
     const { error, value } = folderValidations.create.validate(req.body);
     if (error) return res.status(400).json({ message: error });
+
     let response;
     try {
       response = await FolderServices.createFolder(value);
@@ -14,13 +15,12 @@ const FolderController = {
     }
 
     const object = reformatResponse(response);
-
     res.status(201).send(object);
   },
 
   get: async function (req, res, next) {
     const { error, value } = folderValidations.get.validate(req.body);
-    if (error) return res.status(400).json({ message: error });
+    if (error) return res.status(400).json({ message: error.message });
 
     const { id } = value;
     let response;
@@ -31,7 +31,6 @@ const FolderController = {
     }
 
     const object = reformatResponse(response);
-
     res.status(200).send(object);
   },
 
@@ -62,7 +61,6 @@ const FolderController = {
     }
 
     const object = reformatResponse(response);
-
     res.status(200).send(object);
   },
 };

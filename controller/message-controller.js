@@ -6,7 +6,7 @@ const MessageController = {
   create: async function (req, res, next) {
     const { error, value } = messageValidations.create.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return res.status(400).json({ message: error.message });
     }
     try {
       const response = await MessageService.create(value);

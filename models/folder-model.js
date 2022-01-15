@@ -21,11 +21,10 @@ const folder = new Schema(
         type: Date,
       },
     },
-    // TODO: add after implementation of User entity
-    // userId: {
-    //   type: ObjectId,
-    //   required: true,
-    // },
+    userId: {
+      type: ObjectId,
+      required: true,
+    },
     order: Number,
   },
   { versionKey: false },

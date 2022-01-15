@@ -1,5 +1,11 @@
-function reformatResponse(response) {
-    const { _id, title, sys, ...rest } = response.toJSON();
-    return { id: _id, title, ...rest, sys };
+function reformatResponse(object) {
+  const response = object.toJSON();
+  const { _id, ...rest } = response;
+  const finalObject = { id: _id, ...rest };
+
+  if (response.sys) finalObject.sys = response.sys;
+  if (finalObject.password) delete finalObject.password;
+
+  return finalObject;
 }
 module.exports = { reformatResponse };

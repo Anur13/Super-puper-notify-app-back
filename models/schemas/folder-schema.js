@@ -10,7 +10,7 @@ const folderValidations = {
       lastUpdated: Joi.date().iso(),
     }),
     order: Joi.number(),
-    // userId: Joi.objectId().required()
+    userId: Joi.objectId().required(),
   }),
 
   get: Joi.object({
