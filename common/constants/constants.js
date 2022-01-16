@@ -11,6 +11,7 @@ const Constants = {
       update: "/update",
     },
     user: {
+      main: "/user",
       create: "/registration",
       login: "/login",
     },
