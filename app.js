@@ -28,7 +28,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  if (error.details) {
+  if (!error.statusCode) {
     return next(error, req, res);
   }
   res.status(error.statusCode).send(error);
