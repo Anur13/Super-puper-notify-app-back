@@ -5,7 +5,7 @@ const { reformatResponse } = require("../helpers/controller-helper");
 const FolderController = {
   create: async function (req, res, next) {
     const { error, value } = folderValidations.create.validate(req.body);
-    if (error) return res.status(400).json({ message: error });
+    if (error) return next(error);
 
     let response;
     try {
@@ -20,7 +20,7 @@ const FolderController = {
 
   get: async function (req, res, next) {
     const { error, value } = folderValidations.get.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
+    if (error) return next(error);
 
     const { id } = value;
     let response;
@@ -36,7 +36,7 @@ const FolderController = {
 
   delete: async function (req, res, next) {
     const { error, value } = folderValidations.delete.validate(req.body);
-    if (error) return res.status(400).json({ message: error });
+    if (error) return next(error);
 
     const { id } = value;
 
@@ -51,7 +51,7 @@ const FolderController = {
 
   update: async function (req, res, next) {
     const { error, value } = folderValidations.update.validate(req.body);
-    if (error) return res.status(400).json({ message: error });
+    if (error) return next(error);
 
     let response;
     try {

@@ -3,7 +3,7 @@ const bCrypt = require("bcryptjs");
 const userErrors = require("../errors/userErrors");
 
 const UserServices = {
-  createUser: async function (object) {
+  createUser: async function(object) {
     const checkUser = await userDao.getByEmail(object.email);
     if (checkUser) {
       throw userErrors.alreadyExist(object.email);
@@ -18,7 +18,7 @@ const UserServices = {
     return await userDao.create(objectWithHashedPassword);
   },
 
-  login: async function (object) {
+  login: async function(object) {
     const user = await userDao.getByEmail(object.email);
     if (!user) {
       throw userErrors.notFound(object.email);

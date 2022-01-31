@@ -6,7 +6,7 @@ const MessageListController = {
   create: async function (req, res, next) {
     const { error, value } = messageListValidations.create.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.message });
+      return next(error);
     }
     try {
       const response = await MessageListService.create(value);
@@ -19,7 +19,7 @@ const MessageListController = {
   get: async function (req, res, next) {
     const { error, value } = messageListValidations.get.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     try {
       const response = await MessageListService.get(value.id);
@@ -32,7 +32,7 @@ const MessageListController = {
   delete: async function (req, res, next) {
     const { error, value } = messageListValidations.delete.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     try {
       await MessageListService.delete(value.id);
@@ -45,7 +45,7 @@ const MessageListController = {
   update: async function (req, res, next) {
     const { value, error } = messageListValidations.update.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     const messageListToUpdate = await MessageListService.get(value.id);
     try {
