@@ -28,14 +28,13 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  //TODO: ломает ошибку, статус 200 пишет в ошибке
-  // if (!error.status) {
-  //   next(error, req, res);
-  // }
-  res.status(error.statusCode).json({ message: error.description });
+  if (!error.statusCode) {
+    return next(error, req, res);
+  }
+  res.status(error.statusCode).send(error);
 });
 
 app.use((error, req, res, next) => {
-  res.send(error);
+  res.status(400).json({ message: error.message });
 });
 module.exports = app;

@@ -6,16 +6,19 @@ const messageListErrors = {
     "CREATE SAME TITLE",
     errorStatusCodes.NOT_FOUND,
     "Cannot create. Message list with this title already exists.",
+    "messageList/create",
   ),
   sameTitleUpdate: new APIError(
     "UPDATE SAME TITLE",
     errorStatusCodes.NOT_FOUND,
     "Cannot update. Message list with this title already exists.",
+    "messageList/update",
   ),
   notFound: new APIError(
     "NOT FOUND",
     errorStatusCodes.NOT_FOUND,
     "No such message list found",
+    "messageList/get",
   ),
 };
 

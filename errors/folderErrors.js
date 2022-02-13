@@ -6,11 +6,13 @@ const folderErrors = {
     "CREATE SAME TITLE",
     errorStatusCodes.NOT_FOUND,
     "Cannot create. Folder with this title already exists.",
+    "folder/create",
   ),
   sameTitleUpdate: new APIError(
     "UPDATE SAME TITLE",
     errorStatusCodes.NOT_FOUND,
     "Cannot update. Folder with this title already exists.",
+    "folder/update",
   ),
   notFound: new APIError("NOT FOUND", errorStatusCodes.NOT_FOUND, "No such folder found"),
 };

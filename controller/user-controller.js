@@ -5,7 +5,7 @@ const { reformatResponse } = require("../helpers/controller-helper");
 const UserController = {
   create: async function (req, res, next) {
     const { error, value } = userValidations.create.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
+    if (error) return next(error);
     value.email = value.email.toLowerCase();
 
     let response;
@@ -21,7 +21,7 @@ const UserController = {
 
   login: async function (req, res, next) {
     const { error, value } = userValidations.login.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
+    if (error) return next(error);
     value.email = value.email.toLowerCase();
 
     let response;

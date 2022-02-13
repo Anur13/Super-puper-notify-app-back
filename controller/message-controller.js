@@ -6,7 +6,7 @@ const MessageController = {
   create: async function (req, res, next) {
     const { error, value } = messageValidations.create.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.message });
+      return next(error);
     }
     try {
       const response = await MessageService.create(value);
@@ -19,7 +19,7 @@ const MessageController = {
   get: async function (req, res, next) {
     const { error, value } = messageValidations.get.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     try {
       const response = await MessageService.get(value.id);
@@ -32,7 +32,7 @@ const MessageController = {
   delete: async function (req, res, next) {
     const { error, value } = messageValidations.delete.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     try {
       await MessageService.delete(value.id);
@@ -45,7 +45,7 @@ const MessageController = {
   update: async function (req, res, next) {
     const { value, error } = messageValidations.update.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error });
+      return next(error);
     }
     const messageListToUpdate = await MessageService.get(value.id);
     try {
