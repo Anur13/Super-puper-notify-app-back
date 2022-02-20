@@ -11,7 +11,7 @@ const FolderController = {
     try {
       response = await FolderServices.createFolder(value);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
     const object = reformatResponse(response);
@@ -27,7 +27,7 @@ const FolderController = {
     try {
       response = await FolderServices.getFolder(id);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
     const object = reformatResponse(response);
@@ -43,7 +43,7 @@ const FolderController = {
     try {
       await FolderServices.deleteFolder(id);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
     res.status(200).send({});
@@ -57,7 +57,7 @@ const FolderController = {
     try {
       response = await FolderServices.updateFolder(value);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
     const object = reformatResponse(response);

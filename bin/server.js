@@ -1,5 +1,6 @@
 const app = require("../app");
-require("dotenv").config({ path: process.cwd() + "/../.env" });
+const Path = require("path");
+require("dotenv").config({ path: Path.resolve(__dirname + "/../.env") });
 const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;

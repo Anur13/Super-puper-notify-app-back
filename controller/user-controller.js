@@ -1,6 +1,7 @@
 const UserServices = require("../services/user-service");
 const userValidations = require("../models/schemas/user-schema");
 const { reformatResponse } = require("../helpers/controller-helper");
+const Auth = require("../helpers/auth");
 
 const UserController = {
   create: async function (req, res, next) {
@@ -12,10 +13,11 @@ const UserController = {
     try {
       response = await UserServices.createUser(value);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
-    const object = reformatResponse(response);
+    const token = Auth.createToken(response.toJSON()._id);
+    const object = reformatResponse(response, token);
     res.status(201).send(object);
   },
 
@@ -28,10 +30,11 @@ const UserController = {
     try {
       response = await UserServices.login(value);
     } catch (e) {
-      next(e);
+      return next(e);
     }
 
-    const object = reformatResponse(response);
+    const token = Auth.createToken(response.toJSON()._id);
+    const object = reformatResponse(response, token);
     res.status(200).send(object);
   },
 };
